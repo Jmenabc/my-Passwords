@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "591582176779",
+    "project_id": "my-passwords-7057d",
+    "storage_bucket": "my-passwords-7057d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:591582176779:android:254661e0698a0b6023090e",
+        "android_client_info": {
+          "package_name": "com.example.my_passwords"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "591582176779-fif39hovr7msc86ue4b8mkudam8p3o8k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXI2k7Ik2cEn4JRAI4ni2eo-KDk521WEo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "591582176779-fif39hovr7msc86ue4b8mkudam8p3o8k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
