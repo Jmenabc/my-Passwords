@@ -9,6 +9,7 @@ class HomesScreen extends StatefulWidget {
 }
 
 class _HomesScreenState extends State<HomesScreen> {
+  bool visible = false;
   @override
   Widget build(BuildContext context) {
     String website = "";
@@ -26,7 +27,7 @@ class _HomesScreenState extends State<HomesScreen> {
                 context: context,
                 builder: (context) {
                   return Card(
-                    margin: const EdgeInsets.all(64),
+                    margin: const EdgeInsets.all(40),
                     child: Column(
                       children: [
                         const Padding(
@@ -68,7 +69,7 @@ class _HomesScreenState extends State<HomesScreen> {
                                 type = type1;
                               },
                               decoration: const InputDecoration(
-                                  label: Text('Contraseña')),
+                                  label: Text('Tipo')),
                             )),
                         const Spacer(),
                         Container(
@@ -131,7 +132,6 @@ class _HomesScreenState extends State<HomesScreen> {
         itemCount: snapshot.data?.docs.length,
         itemBuilder: (BuildContext context, int index) {
           DocumentSnapshot ds = snapshot.data!.docs[index];
-          // return buildGestureDetector(context, ds);
           return buildCardInfo(ds);
         });
   }
@@ -153,8 +153,13 @@ class _HomesScreenState extends State<HomesScreen> {
           ListTile(
             leading: Container(
                 padding: const EdgeInsets.all(8),
-                child: const Icon(Icons.lock_outline_rounded)),
-            title: Text('Contraseña: ${ds['password']}'),
+                child:  const Icon(Icons.lock_outline_rounded)),
+            title: Text(visible ? 'Contraseña: ${ds['password']}' : '*********'),
+            trailing: IconButton(onPressed: () {
+              setState(() {
+                visible = !visible;
+              });
+            },icon:const Icon(Icons.lock_outline_rounded)),
           ),
         ],
       ),
