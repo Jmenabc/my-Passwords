@@ -132,72 +132,31 @@ class _HomesScreenState extends State<HomesScreen> {
         itemBuilder: (BuildContext context, int index) {
           DocumentSnapshot ds = snapshot.data!.docs[index];
           // return buildGestureDetector(context, ds);
-          return Card(
-            child: ExpansionTile(
-              title: Text('${ds['website']}'),
-              subtitle: Text('${ds['type']}'),
-              children: <Widget>[
-                const Divider(),
-                ListTile(
-                  leading: Container(
-                      padding: const EdgeInsets.all(8),
-                      child: const Icon(Icons.person_outline_outlined)),
-                  title: Text('Usuario: ${ds['username']}'),
-                ),
-                const Divider(),
-                ListTile(
-                  leading: Container(
-                      padding: const EdgeInsets.all(8),
-                      child: const Icon(Icons.lock_outline_rounded)),
-                  title: Text('Contraseña: ${ds['password']}'),
-                ),
-              ],
-            ),
-          );
+          return buildCardInfo(ds);
         });
   }
 
-  GestureDetector buildGestureDetector(
-      BuildContext context, DocumentSnapshot<Object?> ds) {
-    return GestureDetector(
-      onTap: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                insetPadding: const EdgeInsets.only(top: 232, bottom: 232),
-                content: Column(
-                  children: [
-                    Container(
-                      height: 100,
-                      padding: const EdgeInsets.all(16),
-                      child: Center(child: Text('Usuario: ${ds['username']}')),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      child: Center(
-                          child: Tooltip(
-                        showDuration: const Duration(seconds: 30),
-                        message: 'Contraseña:  ${ds['password']}',
-                        child: const Center(child: Icon(Icons.lock_open)),
-                      )),
-                    )
-                  ],
-                ),
-              );
-            });
-      },
-      child: ShowCard(ds),
-    );
-  }
-
-  SizedBox ShowCard(DocumentSnapshot<Object?> ds) {
-    return SizedBox(
-      height: 72,
-      child: Card(
-        color: Colors.grey,
-        elevation: 8,
-        child: Center(child: Text(ds['website'])),
+  Card buildCardInfo(DocumentSnapshot<Object?> ds) {
+    return Card(
+      child: ExpansionTile(
+        title: Text('${ds['website']}'),
+        subtitle: Text('${ds['type']}'),
+        children: <Widget>[
+          const Divider(),
+          ListTile(
+            leading: Container(
+                padding: const EdgeInsets.all(8),
+                child: const Icon(Icons.person_outline_outlined)),
+            title: Text('Usuario: ${ds['username']}'),
+          ),
+          const Divider(),
+          ListTile(
+            leading: Container(
+                padding: const EdgeInsets.all(8),
+                child: const Icon(Icons.lock_outline_rounded)),
+            title: Text('Contraseña: ${ds['password']}'),
+          ),
+        ],
       ),
     );
   }
