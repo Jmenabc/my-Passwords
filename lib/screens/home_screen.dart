@@ -146,23 +146,25 @@ class _HomesScreenState extends State<HomesScreen> {
           ListTile(
             leading: Container(
                 padding: const EdgeInsets.all(8),
-                child: const Icon(Icons.person_outline_outlined)),
-            title: Text('Usuario: ${ds['username']}'),
+                child: const Tooltip(message:'Usuario',child: Icon(Icons.person_outline_outlined))),
+            title: Text('${ds['username']}'),
           ),
           const Divider(),
           ListTile(
             leading: Container(
                 padding: const EdgeInsets.all(8),
-                child:  const Icon(Icons.lock_outline_rounded)),
-            title: Text(visible ? 'Contraseña: ${ds['password']}' : '*********'),
+                child:  const Tooltip(message:'Contraseña',child: Icon(Icons.lock_outline_rounded))),
+            title: Text(visible?'${ds['password']}':'*********'),
             trailing: IconButton(onPressed: () {
               setState(() {
                 visible = !visible;
               });
-            },icon:const Icon(Icons.lock_outline_rounded)),
+            },icon: Icon(!visible ? Icons.remove_red_eye_outlined : Icons.visibility_off_outlined)),
           ),
         ],
       ),
     );
   }
+
+
 }

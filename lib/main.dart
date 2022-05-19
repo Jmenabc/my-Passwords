@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:my_passwords/screens/home_screen.dart';
+import 'package:my_passwords/screens/register_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       title: 'Password Manager',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(),
-      home: const HomesScreen(),
+      home: const RegisterScreen() /*HomesScreen()*/,
     );
   }
 }
