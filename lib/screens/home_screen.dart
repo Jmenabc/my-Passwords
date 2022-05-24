@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:my_passwords/screens/user_screen.dart';
 
 class HomesScreen extends StatefulWidget {
   const HomesScreen({Key? key}) : super(key: key);
@@ -10,6 +12,7 @@ class HomesScreen extends StatefulWidget {
 
 class _HomesScreenState extends State<HomesScreen> {
   bool visible = false;
+
   @override
   Widget build(BuildContext context) {
     String website = "";
@@ -21,6 +24,60 @@ class _HomesScreenState extends State<HomesScreen> {
 
     // final reference = FirebaseFirestore.instance;
     return Scaffold(
+        bottomNavigationBar: GNav(
+            rippleColor: Colors.grey,
+            // tab button ripple color when pressed
+            hoverColor: Colors.grey,
+            // tab button hover color
+            haptic: true,
+            // haptic feedback
+            tabBorderRadius: 15,
+            tabActiveBorder: Border.all(color: Colors.black, width: 1),
+            // tab button border
+            tabBorder: Border.all(color: Colors.grey, width: 1),
+            // tab button border
+            tabShadow: [
+              BoxShadow(color: Colors.grey.withOpacity(0.5), blurRadius: 8)
+            ],
+            // tab button shadow
+            curve: Curves.easeOutExpo,
+            // tab animation curves
+            duration: const Duration(milliseconds: 900),
+            // tab animation duration
+            gap: 8,
+            // the tab button gap between icon and text
+            color: Colors.grey[800],
+            // unselected icon color
+            activeColor: Colors.purple,
+            // selected icon and text color
+            iconSize: 24,
+            // tab button icon size
+            tabBackgroundColor: Colors.purple.withOpacity(0.1),
+            // selected tab background color
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            // navigation bar padding
+            tabs: [
+              GButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const HomesScreen()),
+                  );
+                },
+                icon: Icons.home,
+                text: 'Passwords',
+              ),
+              GButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const UserScreen()),
+                  );
+                },
+                icon: Icons.person,
+                text: 'User',
+              ),
+            ]),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             showDialog(
@@ -68,8 +125,8 @@ class _HomesScreenState extends State<HomesScreen> {
                               onChanged: (type1) {
                                 type = type1;
                               },
-                              decoration: const InputDecoration(
-                                  label: Text('Tipo')),
+                              decoration:
+                                  const InputDecoration(label: Text('Tipo')),
                             )),
                         const Spacer(),
                         Container(
@@ -146,25 +203,31 @@ class _HomesScreenState extends State<HomesScreen> {
           ListTile(
             leading: Container(
                 padding: const EdgeInsets.all(8),
-                child: const Tooltip(message:'Usuario',child: Icon(Icons.person_outline_outlined))),
+                child: const Tooltip(
+                    message: 'Usuario',
+                    child: Icon(Icons.person_outline_outlined))),
             title: Text('${ds['username']}'),
           ),
           const Divider(),
           ListTile(
             leading: Container(
                 padding: const EdgeInsets.all(8),
-                child:  const Tooltip(message:'Contraseña',child: Icon(Icons.lock_outline_rounded))),
-            title: Text(visible?'${ds['password']}':'*********'),
-            trailing: IconButton(onPressed: () {
-              setState(() {
-                visible = !visible;
-              });
-            },icon: Icon(!visible ? Icons.remove_red_eye_outlined : Icons.visibility_off_outlined)),
+                child: const Tooltip(
+                    message: 'Contraseña',
+                    child: Icon(Icons.lock_outline_rounded))),
+            title: Text(visible ? '${ds['password']}' : '*********'),
+            trailing: IconButton(
+                onPressed: () {
+                  setState(() {
+                    visible = !visible;
+                  });
+                },
+                icon: Icon(!visible
+                    ? Icons.remove_red_eye_outlined
+                    : Icons.visibility_off_outlined)),
           ),
         ],
       ),
     );
   }
-
-
 }
