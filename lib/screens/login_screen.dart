@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_passwords/screens/home_screen.dart';
-import 'package:my_passwords/screens/login_screen.dart';
+import 'package:my_passwords/screens/register_screen.dart';
 
-class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   Future<FirebaseApp> _initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
@@ -64,7 +64,7 @@ class RegisterScreen extends StatelessWidget {
             Container(
                 padding: const EdgeInsets.all(16),
                 child: ElevatedButton(
-                    child: const Text('Register'),
+                    child: const Text('Login'),
                     onPressed: () {
                       try {
                         final user = FirebaseAuth.instance
@@ -77,13 +77,16 @@ class RegisterScreen extends StatelessWidget {
                                           const HomesScreen()),
                                 ));
                       } on FirebaseAuthException catch (e) {
-                        if (e.code == 'weak-password') {
-                          print('The password provided is too weak.');
-                        } else if (e.code == 'email-already-in-use') {
-                          print('The account already exists for that email.');
+                        if (e.code == 'user-not-found') {
+                          print('No user found for that email.');
+                        } else if (e.code == 'wrong-password') {
+                          print('Wrong password provided for that user.');
+                        } else {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => const HomesScreen()),
+                          );
                         }
-                      } catch (e) {
-                        print(e);
                       }
                     })),
             GestureDetector(
@@ -91,12 +94,12 @@ class RegisterScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const LoginScreen()),
+                      builder: (context) => const RegisterScreen()),
                 );
               },
               child: Container(
                 padding: const EdgeInsets.all(8),
-                child: const Text('Pulsa aqui para Loguearse'),
+                child: const Text('Pulsa aqui para registrarte'),
               ),
             )
           ],
@@ -116,7 +119,7 @@ class RegisterScreen extends StatelessWidget {
             child: const Align(
                 alignment: Alignment.topCenter,
                 child: Text(
-                  'Registrate',
+                  'Logueate',
                   style: TextStyle(fontSize: 32),
                 ))),
       ),
