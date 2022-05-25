@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -15,16 +16,19 @@ class _HomesScreenState extends State<HomesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    User? user;
     String website = "";
     String usuario = "";
     String password = "";
     String type = "";
     CollectionReference firestore =
-        FirebaseFirestore.instance.collection('users');
+        FirebaseFirestore.instance.collection('$uid');
 
     // final reference = FirebaseFirestore.instance;
     return Scaffold(
         bottomNavigationBar: GNav(
+          tabMargin: const EdgeInsets.all(8),
             rippleColor: Colors.grey,
             // tab button ripple color when pressed
             hoverColor: Colors.grey,
@@ -157,8 +161,8 @@ class _HomesScreenState extends State<HomesScreen> {
           ),
         ),
         appBar: AppBar(
-          leading: const Tooltip(
-              message: 'Bienvenido Lord Mena', child: Icon(Icons.person)),
+          leading:  Tooltip(
+              message: 'Bienvenido ${user?.displayName ?? "usuario"}', child: const Icon(Icons.person)),
           actions: [
             Tooltip(
               message: 'Para añadir contraseñas pulse el mas',
@@ -172,7 +176,7 @@ class _HomesScreenState extends State<HomesScreen> {
           backgroundColor: Colors.blueGrey,
         ),
         body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('users').snapshots(),
+          stream: FirebaseFirestore.instance.collection('$uid').snapshots(),
           builder: (context,
               AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
             if (!snapshot.hasData) {
