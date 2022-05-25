@@ -62,8 +62,8 @@ class _UserScreenState extends State<UserScreen> {
                         MaterialPageRoute(builder: (context) => UserScreen()),
                       );
                     },
-                    icon: Icons.person,
-                    text: 'User',
+                    icon: Icons.settings,
+                    text: 'Config',
                   ),
                   GButton(
                     onPressed: () {
@@ -99,9 +99,7 @@ class _UserScreenState extends State<UserScreen> {
                             await FilePicker.platform.pickFiles();
                         final fileBytes = result?.files.first.bytes;
                         if (fileBytes != null && uid != null) {
-                          context
-                              .read<UserImageCubit>()
-                              .uploadImage(fileBytes, uid);
+                          context.read<UserImageCubit>().uploadData(fileBytes, uid);
                         }
                       }),
                 )

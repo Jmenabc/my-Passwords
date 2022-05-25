@@ -9,13 +9,13 @@ part 'user_image_state.dart';
 class UserImageCubit extends Cubit<UserImageState> {
   UserImageCubit() : super(UserImageInitial());
 
-  void uploadImage(Uint8List? byte, String uid) async {
-    FirebaseStorage.instance.ref('profile/$uid');
+  void uploadData(Uint8List fileBytes, String uid) async {
+    await FirebaseStorage.instance.ref('profile/$uid.jpg').putData(fileBytes);
   }
 
-  void getImage(String uid) async {
+  void getUserImage(String uid) async {
     final ref =
-        await FirebaseStorage.instance.ref('profile/$uid.jpg').getDownloadURL();
+    await FirebaseStorage.instance.ref('profile/$uid.jpg').getDownloadURL();
     emit(ImageLoadedState(ref));
   }
 }

@@ -28,7 +28,7 @@ class _HomesScreenState extends State<HomesScreen> {
     // final reference = FirebaseFirestore.instance;
     return Scaffold(
         bottomNavigationBar: GNav(
-          tabMargin: const EdgeInsets.all(8),
+            tabMargin: const EdgeInsets.all(8),
             rippleColor: Colors.grey,
             // tab button ripple color when pressed
             hoverColor: Colors.grey,
@@ -62,24 +62,18 @@ class _HomesScreenState extends State<HomesScreen> {
             // navigation bar padding
             tabs: [
               GButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const HomesScreen()),
-                  );
-                },
+                onPressed: () {},
                 icon: Icons.home,
                 text: 'Passwords',
               ),
               GButton(
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const UserScreen()),
+                    MaterialPageRoute(builder: (context) => const UserScreen()),
                   );
                 },
-                icon: Icons.person,
-                text: 'User',
+                icon: Icons.settings,
+                text: 'Config',
               ),
             ]),
         floatingActionButton: FloatingActionButton(
@@ -161,8 +155,9 @@ class _HomesScreenState extends State<HomesScreen> {
           ),
         ),
         appBar: AppBar(
-          leading:  Tooltip(
-              message: 'Bienvenido ${user?.displayName ?? "usuario"}', child: const Icon(Icons.person)),
+          leading: Tooltip(
+              message: 'Bienvenido ${user?.displayName ?? "usuario"}',
+              child: const Icon(Icons.person)),
           actions: [
             Tooltip(
               message: 'Para añadir contraseñas pulse el mas',
