@@ -35,19 +35,9 @@ class LoginScreen extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.only(top: 40, left: 8),
         child: Row(children: [
+          Container(padding: const EdgeInsets.only(left: 92),child: const Text('Mena')),
           const Icon(Icons.flash_off, size: 124),
-          Column(
-            children: [
-              Container(
-                  padding: const EdgeInsets.only(
-                      top: 24, left: 32),
-                  child: const Text('Mena')),
-              Container(
-                  padding: const EdgeInsets.only(
-                      top: 24, left: 32, bottom: 32),
-                  child: const Text('Company')),
-            ],
-          )
+          Container(padding: const EdgeInsets.only(right: 8),child: const Text('Company')),
         ]));
   }
 
@@ -56,68 +46,73 @@ class LoginScreen extends StatelessWidget {
     TextEditingController passwordController = TextEditingController();
     return Padding(
       padding: const EdgeInsets.only(top: 64),
-      child: Container(
-        decoration: BoxDecoration(
-            color: Colors.grey, borderRadius: BorderRadius.circular(16)),
-        width: size.width * 0.9,
-        height: size.height * 0.4,
-        child: Column(
-          children: [
-            Container(
-                padding: const EdgeInsets.all(16),
-                child: TextFormField(
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                        label: Text('Correo',
-                            style: TextStyle(color: Colors.blue))))),
-            Container(
-                padding: const EdgeInsets.all(16),
-                child: TextFormField(
-                    controller: passwordController,
-                    decoration: const InputDecoration(
-                        label: Text('Contraseña',
-                            style: TextStyle(color: Colors.blue))))),
-            Container(
-                padding: const EdgeInsets.all(16),
-                child: ElevatedButton(
-                    child: const Text('Log in'),
-                    onPressed: () {
-                      try {
-                        final user = FirebaseAuth.instance
-                            .signInWithEmailAndPassword(
-                                email: emailController.text,
-                                password: passwordController.text)
-                            .then((value) => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const HomesScreen()),
-                                ));
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code == 'weak-password') {
-                          print('The password provided is too weak.');
-                        } else if (e.code == 'email-already-in-use') {
-                          print('The account already exists for that email.');
-                        } else if (e.code == 'wrong-password') {
-                          print('Wrong password');
+      child: Material(
+        elevation: 16,
+        child: Container(
+          decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+          width: size.width * 0.9,
+          height: size.height * 0.4,
+          child: Column(
+            children: [
+              Container(
+                  padding: const EdgeInsets.all(16),
+                  child: TextFormField(
+                      controller: emailController,
+                      decoration: const InputDecoration(
+                          label: Text('Correo',
+                              style: TextStyle(color: Colors.blue))))),
+              Container(
+                  padding: const EdgeInsets.all(16),
+                  child: TextFormField(
+                      obscureText: true,
+                      autofillHints: const [AutofillHints.password],
+                      textInputAction: TextInputAction.done,
+                      controller: passwordController,
+                      decoration: const InputDecoration(
+                          label: Text('Contraseña',
+                              style: TextStyle(color: Colors.blue))))),
+              Container(
+                  padding: const EdgeInsets.all(16),
+                  child: ElevatedButton(
+                      child: const Text('Log in'),
+                      onPressed: () {
+                        try {
+                          final user = FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: emailController.text,
+                                  password: passwordController.text)
+                              .then((value) => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                             HomesScreen()),
+                                  ));
+                        } on FirebaseAuthException catch (e) {
+                          if (e.code == 'weak-password') {
+                            print('The password provided is too weak.');
+                          } else if (e.code == 'email-already-in-use') {
+                            print('The account already exists for that email.');
+                          } else if (e.code == 'wrong-password') {
+                            print('Wrong password');
+                          }
+                        } catch (e) {
+                          print(e);
                         }
-                      } catch (e) {
-                        print(e);
-                      }
-                    })),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const RegisterScreen()),
-                );
-              },
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                child: const Text('Pulsa aqui para Registrarte'),
-              ),
-            )
-          ],
+                      })),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RegisterScreen()),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  child: const Text('Pulsa aqui para Registrarte'),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

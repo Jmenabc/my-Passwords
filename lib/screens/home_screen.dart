@@ -1,21 +1,28 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:my_passwords/screens/user_screen.dart';
+import 'package:my_passwords/screens/login_screen.dart';
 
 class HomesScreen extends StatefulWidget {
-  const HomesScreen({Key? key}) : super(key: key);
+   HomesScreen({Key? key}) : super(key: key);
+
+
 
   @override
   State<HomesScreen> createState() => _HomesScreenState();
 }
 
 class _HomesScreenState extends State<HomesScreen> {
+  //Encrypt and Decrypt
+
+  //Visible text
   bool visible = false;
 
   @override
   Widget build(BuildContext context) {
+    //Firebase
     final uid = FirebaseAuth.instance.currentUser?.uid;
     User? user;
     String website = "";
@@ -27,55 +34,6 @@ class _HomesScreenState extends State<HomesScreen> {
 
     // final reference = FirebaseFirestore.instance;
     return Scaffold(
-        bottomNavigationBar: GNav(
-            tabMargin: const EdgeInsets.all(8),
-            rippleColor: Colors.grey,
-            // tab button ripple color when pressed
-            hoverColor: Colors.grey,
-            // tab button hover color
-            haptic: true,
-            // haptic feedback
-            tabBorderRadius: 15,
-            tabActiveBorder: Border.all(color: Colors.black, width: 1),
-            // tab button border
-            tabBorder: Border.all(color: Colors.grey, width: 1),
-            // tab button border
-            tabShadow: [
-              BoxShadow(color: Colors.grey.withOpacity(0.5), blurRadius: 8)
-            ],
-            // tab button shadow
-            curve: Curves.easeOutExpo,
-            // tab animation curves
-            duration: const Duration(milliseconds: 900),
-            // tab animation duration
-            gap: 8,
-            // the tab button gap between icon and text
-            color: Colors.grey[800],
-            // unselected icon color
-            activeColor: Colors.purple,
-            // selected icon and text color
-            iconSize: 24,
-            // tab button icon size
-            tabBackgroundColor: Colors.purple.withOpacity(0.1),
-            // selected tab background color
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            // navigation bar padding
-            tabs: [
-              GButton(
-                onPressed: () {},
-                icon: Icons.home,
-                text: 'Passwords',
-              ),
-              GButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const UserScreen()),
-                  );
-                },
-                icon: Icons.settings,
-                text: 'Config',
-              ),
-            ]),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             showDialog(
@@ -133,13 +91,14 @@ class _HomesScreenState extends State<HomesScreen> {
                                 alignment: Alignment.bottomRight,
                                 child: TextButton(
                                     onPressed: () async {
-                                      await firestore.add({
+                                        await firestore.add({
                                         "website": website,
                                         "username": usuario,
                                         "password": password,
                                         "type": type
                                       }).then(
                                           (value) => print("Cuenta añadida"));
+
                                       Navigator.pop(context);
                                     },
                                     child: const Text('Aceptar'))))
@@ -160,10 +119,16 @@ class _HomesScreenState extends State<HomesScreen> {
               child: const Icon(Icons.person)),
           actions: [
             Tooltip(
-              message: 'Para añadir contraseñas pulse el mas',
+              message: 'Cerrar sesión',
               child: Container(
-                  padding: const EdgeInsets.all(8),
-                  child: const Icon(Icons.info_outline_rounded)),
+                padding: const EdgeInsets.only(right: 8),
+                child: IconButton(onPressed: () async {
+                  await FirebaseAuth.instance.signOut().then((value) =>
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const LoginScreen())));
+                },
+                    icon: const Icon(Icons.logout)),
+              ),
             )
           ],
           title: const Text('My passwords'),
@@ -193,6 +158,7 @@ class _HomesScreenState extends State<HomesScreen> {
   }
 
   Card buildCardInfo(DocumentSnapshot<Object?> ds) {
+    String pssword = ds['password'];
     return Card(
       child: ExpansionTile(
         title: Text('${ds['website']}'),
