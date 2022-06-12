@@ -1,27 +1,24 @@
-import 'dart:convert';
-
+import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:encrypt/encrypt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:my_passwords/screens/login_screen.dart';
 
 class HomesScreen extends StatefulWidget {
-   HomesScreen({Key? key}) : super(key: key);
-
-
-
   @override
   State<HomesScreen> createState() => _HomesScreenState();
 }
 
 class _HomesScreenState extends State<HomesScreen> {
-  //Encrypt and Decrypt
-
   //Visible text
   bool visible = false;
 
   @override
   Widget build(BuildContext context) {
+    final key = encrypt.Key.fromUtf8('my 32 length key................');
+    final iv = encrypt.IV.fromLength(16);
+    final encrypter = encrypt.Encrypter(encrypt.Salsa20(key));
     //Firebase
     final uid = FirebaseAuth.instance.currentUser?.uid;
     User? user;
@@ -91,7 +88,7 @@ class _HomesScreenState extends State<HomesScreen> {
                                 alignment: Alignment.bottomRight,
                                 child: TextButton(
                                     onPressed: () async {
-                                        await firestore.add({
+                                      await firestore.add({
                                         "website": website,
                                         "username": usuario,
                                         "password": password,
@@ -122,11 +119,12 @@ class _HomesScreenState extends State<HomesScreen> {
               message: 'Cerrar sesión',
               child: Container(
                 padding: const EdgeInsets.only(right: 8),
-                child: IconButton(onPressed: () async {
-                  await FirebaseAuth.instance.signOut().then((value) =>
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const LoginScreen())));
-                },
+                child: IconButton(
+                    onPressed: () async {
+                      await FirebaseAuth.instance.signOut().then((value) =>
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const LoginScreen())));
+                    },
                     icon: const Icon(Icons.logout)),
               ),
             )
@@ -142,22 +140,25 @@ class _HomesScreenState extends State<HomesScreen> {
             if (!snapshot.hasData) {
               return const Center(child: CircularProgressIndicator());
             }
-            return buildCardContent(snapshot);
+            return buildCardContent(snapshot, iv, encrypter);
           },
         ));
   }
 
   ListView buildCardContent(
-      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot,
+      IV iv,
+      encrypt.Encrypter encrypter) {
     return ListView.builder(
         itemCount: snapshot.data?.docs.length,
         itemBuilder: (BuildContext context, int index) {
           DocumentSnapshot ds = snapshot.data!.docs[index];
-          return buildCardInfo(ds);
+          return buildCardInfo(ds, iv, encrypter);
         });
   }
 
-  Card buildCardInfo(DocumentSnapshot<Object?> ds) {
+  Card buildCardInfo(
+      DocumentSnapshot<Object?> ds, IV iv, encrypt.Encrypter encrypt) {
     String pssword = ds['password'];
     return Card(
       child: ExpansionTile(
