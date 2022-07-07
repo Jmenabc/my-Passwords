@@ -3,6 +3,7 @@ import 'package:encryptor/encryptor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:my_passwords/screens/create_password.dart';
 import 'package:my_passwords/screens/login_screen.dart';
 
 class HomesScreen extends StatefulWidget {
@@ -30,77 +31,10 @@ class _HomesScreenState extends State<HomesScreen> {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return Card(
-                    margin: const EdgeInsets.all(40),
-                    child: Column(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Text('Añadir Cuent@/s'),
-                        ),
-                        Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: TextField(
-                              onChanged: (website1) {
-                                website = website1;
-                              },
-                              decoration: const InputDecoration(
-                                label: Text('Website'),
-                              ),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: TextField(
-                              onChanged: (usuario1) {
-                                usuario = usuario1;
-                              },
-                              decoration:
-                                  const InputDecoration(label: Text('Usuario')),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: TextField(
-                              onChanged: (password1) {
-                                var encrypted = Encryptor.encrypt(key, password1);
-                                password = encrypted;
-                              },
-                              decoration: const InputDecoration(
-                                  label: Text('Contraseña')),
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: TextField(
-                              onChanged: (type1) {
-                                type = type1;
-                              },
-                              decoration:
-                                  const InputDecoration(label: Text('Tipo')),
-                            )),
-                        const Spacer(),
-                        Container(
-                            padding: const EdgeInsets.all(8),
-                            child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: TextButton(
-                                    onPressed: () async {
-                                      await firestore.add({
-                                        "website": website,
-                                        "username": usuario,
-                                        "password": password,
-                                        "type": type
-                                      }).then(
-                                          (value) => print("Cuenta añadida"));
-
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text('Aceptar'))))
-                      ],
-                    ),
-                  );
-                });
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CreatePassword()),
+            );
           },
           backgroundColor: Colors.blueGrey,
           child: const Icon(
