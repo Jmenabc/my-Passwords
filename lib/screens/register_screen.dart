@@ -47,11 +47,12 @@ class RegisterScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 64),
       child: Material(
+        borderRadius: BorderRadius.circular(16),
         elevation: 16,
         child: Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+          decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(16)),
           width: size.width * 0.9,
-          height: size.height * 0.4,
+          height: size.height * 0.5,
           child: Column(
             children: [
               Container(

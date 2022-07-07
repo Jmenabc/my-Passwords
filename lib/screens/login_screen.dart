@@ -35,9 +35,13 @@ class LoginScreen extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.only(top: 40, left: 8),
         child: Row(children: [
-          Container(padding: const EdgeInsets.only(left: 92),child: const Text('Mena')),
+          Container(
+              padding: const EdgeInsets.only(left: 92),
+              child: const Text('Mena')),
           const Icon(Icons.flash_off, size: 124),
-          Container(padding: const EdgeInsets.only(right: 8),child: const Text('Company')),
+          Container(
+              padding: const EdgeInsets.only(right: 8),
+              child: const Text('Company')),
         ]));
   }
 
@@ -48,10 +52,13 @@ class LoginScreen extends StatelessWidget {
       padding: const EdgeInsets.only(top: 64),
       child: Material(
         elevation: 16,
+        borderRadius: BorderRadius.circular(16),
         child: Container(
-          decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(16)),
           width: size.width * 0.9,
-          height: size.height * 0.4,
+          height: size.height * 0.5,
           child: Column(
             children: [
               Container(
@@ -83,8 +90,7 @@ class LoginScreen extends StatelessWidget {
                                   password: passwordController.text)
                               .then((value) => Navigator.of(context).push(
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                             HomesScreen()),
+                                        builder: (context) => HomesScreen()),
                                   ));
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'weak-password') {

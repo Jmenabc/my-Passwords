@@ -1,5 +1,5 @@
-import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:encrypt/encrypt.dart';
+import 'package:encryptor/encryptor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,12 +13,9 @@ class HomesScreen extends StatefulWidget {
 class _HomesScreenState extends State<HomesScreen> {
   //Visible text
   bool visible = false;
-
+  var key = 'Key to encrypt and decrpyt the plain text';
   @override
   Widget build(BuildContext context) {
-    final key = encrypt.Key.fromUtf8('my 32 length key................');
-    final iv = encrypt.IV.fromLength(16);
-    final encrypter = encrypt.Encrypter(encrypt.Salsa20(key));
     //Firebase
     final uid = FirebaseAuth.instance.currentUser?.uid;
     User? user;
@@ -67,7 +64,8 @@ class _HomesScreenState extends State<HomesScreen> {
                             padding: const EdgeInsets.all(16),
                             child: TextField(
                               onChanged: (password1) {
-                                password = password1;
+                                var encrypted = Encryptor.encrypt(key, password1);
+                                password = encrypted;
                               },
                               decoration: const InputDecoration(
                                   label: Text('Contraseña')),
@@ -140,26 +138,26 @@ class _HomesScreenState extends State<HomesScreen> {
             if (!snapshot.hasData) {
               return const Center(child: CircularProgressIndicator());
             }
-            return buildCardContent(snapshot, iv, encrypter);
+            return buildCardContent(snapshot);
           },
         ));
   }
 
   ListView buildCardContent(
       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot,
-      IV iv,
-      encrypt.Encrypter encrypter) {
+      ) {
     return ListView.builder(
         itemCount: snapshot.data?.docs.length,
         itemBuilder: (BuildContext context, int index) {
           DocumentSnapshot ds = snapshot.data!.docs[index];
-          return buildCardInfo(ds, iv, encrypter);
+          return buildCardInfo(ds);
         });
   }
 
   Card buildCardInfo(
-      DocumentSnapshot<Object?> ds, IV iv, encrypt.Encrypter encrypt) {
+      DocumentSnapshot<Object?> ds) {
     String pssword = ds['password'];
+    var decrypted = Encryptor.decrypt(key, pssword);
     return Card(
       child: ExpansionTile(
         title: Text('${ds['website']}'),
@@ -181,7 +179,7 @@ class _HomesScreenState extends State<HomesScreen> {
                 child: const Tooltip(
                     message: 'Contraseña',
                     child: Icon(Icons.lock_outline_rounded))),
-            title: Text(visible ? '${ds['password']}' : '*********'),
+            title: Text(visible ? '${decrypted}' : '*********'),
             trailing: IconButton(
                 onPressed: () {
                   setState(() {

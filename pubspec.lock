@@ -107,12 +107,19 @@ packages:
     source: hosted
     version: "3.0.2"
   encrypt:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: encrypt
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.1"
+  encryptor:
+    dependency: "direct main"
+    description:
+      name: encryptor
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   fake_async:
     dependency: transitive
     description:
